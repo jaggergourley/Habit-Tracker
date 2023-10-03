@@ -1,0 +1,40 @@
+# Python related
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environment
+env/                  # Or whatever name you've given your virtual environment directory
+*.venv/
+.venv/
+venv/
+
+# Flask specific
+instance/
+
+# Development tools
+*.pot
+*.cache/
+*.pytest_cache/
+
+# IDEs and editors
+*.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.log
+
+# Operating systems
+.DS_Store             # macOS
+Thumbs.db             # Windows
+Desktop.ini           # Windows
+*.db                  # Windows thumbnail cache
+
+# Directories to ignore (replace 'node_modules' if using a different package manager)
+node_modules/
+
+# Databases
+*.sqlite
