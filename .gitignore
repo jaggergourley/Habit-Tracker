@@ -6,7 +6,7 @@ __pycache__/
 *.log
 
 # Virtual environment
-env/                  # Or whatever name you've given your virtual environment directory
+env/
 *.venv/
 .venv/
 venv/
