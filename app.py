@@ -6,13 +6,27 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
-class Todo(db.Model):
+class Habit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    name = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String(500))
+    start_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship to the Completion model
+    completions = db.relationship('Completion', backref='habit', lazy=True)
 
     def __repr__(self):
-        return '<Task %r>' % self.id
+        return '<Habit %r>' % self.name
+
+
+class Completion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_completed = db.Column(db.DateTime, default=datetime.utcnow)
+    habit_id = db.Column(db.Integer, db.ForeignKey('habit.id'), nullable=False)
+
+    def __repr__(self):
+        return '<Completion for %r on %r>' % (self.habit.name, self.date_completed)
+
 
 
 @app.route('/')

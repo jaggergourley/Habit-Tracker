@@ -28,10 +28,10 @@ instance/
 *.log
 
 # Operating systems
-.DS_Store             # macOS
-Thumbs.db             # Windows
-Desktop.ini           # Windows
-*.db                  # Windows thumbnail cache
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.db
 
 # Directories to ignore (replace 'node_modules' if using a different package manager)
 node_modules/
