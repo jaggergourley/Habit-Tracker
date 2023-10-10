@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -28,10 +28,32 @@ class Completion(db.Model):
         return '<Completion for %r on %r>' % (self.habit.name, self.date_completed)
 
 
-
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Query all habits
+    habits = Habit.query.all()
+    
+    # Pass them to the template
+    return render_template('index.html', habits=habits)
+
+with app.app_context():
+    db.create_all()
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route('/add-habit', methods=['POST'])
+def add_habit():
+    # Get data from the form
+    name = request.form.get('name')
+    description = request.form.get('description')
+    
+    # Create new Habit object
+    new_habit = Habit(name=name, description=description)
+    
+    # Add to the database
+    db.session.add(new_habit)
+    db.session.commit()
+    
+    # Redirect back to the homepage
+    return redirect(url_for('index'))
