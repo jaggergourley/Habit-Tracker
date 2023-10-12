@@ -57,3 +57,15 @@ def add_habit():
     
     # Redirect back to the homepage
     return redirect(url_for('index'))
+
+@app.route('/delete-habit/<int:habit_id>', methods=['POST'])
+def delete_habit(habit_id):
+    # Find the habit to delete by its ID
+    habit_to_delete = Habit.query.get_or_404(habit_id)
+
+    # Delete the habit from the database
+    db.session.delete(habit_to_delete)
+    db.session.commit()
+
+    # Redirect back to the homepage or any other appropriate page
+    return redirect(url_for('index'))

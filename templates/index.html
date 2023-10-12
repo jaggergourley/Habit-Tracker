@@ -23,6 +23,9 @@
         <form action="/complete-habit/{{ habit.id }}" method="post" style="display:inline;">
             <input type="submit" value="Mark as Completed">
         </form>
+        <form action="/delete-habit/{{ habit.id }}" method="POST">
+            <button type="submit">Delete</button>
+        </form>
     </li>
     {% endfor %}
 </ul>
