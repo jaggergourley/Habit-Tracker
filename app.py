@@ -13,7 +13,7 @@ class Habit(db.Model):
     start_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationship to the Completion model
-    completions = db.relationship('Completion', backref='habit', lazy=True)
+    completions = db.relationship('Completion', backref='habit', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return '<Habit %r>' % self.name
@@ -21,7 +21,7 @@ class Habit(db.Model):
 
 class Completion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date_completed = db.Column(db.DateTime, default=datetime.utcnow)
+    date_completed = db.Column(db.Date, default=datetime.utcnow().date())
     habit_id = db.Column(db.Integer, db.ForeignKey('habit.id'), nullable=False)
 
     def __repr__(self):
@@ -38,9 +38,6 @@ def index():
 
 with app.app_context():
     db.create_all()
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 @app.route('/add-habit', methods=['POST'])
 def add_habit():
@@ -69,3 +66,24 @@ def delete_habit(habit_id):
 
     # Redirect back to the homepage or any other appropriate page
     return redirect(url_for('index'))
+
+@app.route('/complete-habit/<int:habit_id>', methods=['POST'])
+def complete_habit(habit_id):
+    # Find the habit to mark as completed by its ID
+    habit = Habit.query.get_or_404(habit_id)
+    
+    # Check if there's already a completion for today
+    today = datetime.utcnow().date()
+    existing_completion = Completion.query.filter_by(habit_id=habit.id).filter(db.func.date(Completion.date_completed) == today).first()
+
+    if not existing_completion:
+        completion = Completion(habit_id=habit.id)
+        db.session.add(completion)
+        db.session.commit()
+
+    # Redirect back to the homepage
+    return redirect(url_for('index'))
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

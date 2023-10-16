@@ -9,9 +9,9 @@
 
 <form action="/add-habit" method="post">
     <label for="name">Habit Name:</label>
-    <input type="text" name="name" required>
+    <input type="text" name="name" required autocomplete="off">
     <label for="description">Description (optional):</label>
-    <input type="text" name="description">
+    <input type="text" name="description" autocomplete="off">
     <input type="submit" value="Add Habit">
 </form>
 
@@ -19,7 +19,7 @@
 <ul>
     {% for habit in habits %}
     <li>
-        {{ habit.name }} - {{ habit.description }}
+        {{ habit.name }} - {{ habit.description }} (Completed {{ habit.completions|length }} times)
         <form action="/complete-habit/{{ habit.id }}" method="post" style="display:inline;">
             <input type="submit" value="Mark as Completed">
         </form>
