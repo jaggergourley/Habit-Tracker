@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -55,38 +55,22 @@ def get_habits():
 
 @app.route('/add-habit', methods=['POST'])
 def add_habit():
-    # Get data from the form
-    name = request.form.get('name')
-    description = request.form.get('description')
-    
-    # Create new Habit object
-    new_habit = Habit(name=name, description=description)
-    
-    # Add to the database
+    data = request.json
+    new_habit = Habit(name=data['name'], description=data.get('description', ''))
     db.session.add(new_habit)
     db.session.commit()
-    
-    # Redirect back to the homepage
-    return redirect(url_for('index'))
+    return jsonify(new_habit.to_dict())
 
 @app.route('/delete-habit/<int:habit_id>', methods=['POST'])
 def delete_habit(habit_id):
-    # Find the habit to delete by its ID
     habit_to_delete = Habit.query.get_or_404(habit_id)
-
-    # Delete the habit from the database
     db.session.delete(habit_to_delete)
     db.session.commit()
-
-    # Redirect back to the homepage or any other appropriate page
-    return redirect(url_for('index'))
+    return jsonify({'message': 'Habit deleted successfully', 'habit_id': habit_id})
 
 @app.route('/complete-habit/<int:habit_id>', methods=['POST'])
 def complete_habit(habit_id):
-    # Find the habit to mark as completed by its ID
     habit = Habit.query.get_or_404(habit_id)
-    
-    # Check if there's already a completion for today
     today = datetime.utcnow().date()
     existing_completion = Completion.query.filter_by(habit_id=habit.id).filter(db.func.date(Completion.date_completed) == today).first()
 
@@ -95,8 +79,7 @@ def complete_habit(habit_id):
         db.session.add(completion)
         db.session.commit()
 
-    # Redirect back to the homepage
-    return redirect(url_for('index'))
+    return jsonify({'message': 'Habit marked as complete', 'habit_id': habit_id})
 
 
 if __name__ == "__main__":

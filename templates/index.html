@@ -1,33 +1,29 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/static/index.js"></script>
 {% endblock %}
 
 {% block body %}
 <h1>Habit Tracker</h1>
 
-<form action="/add-habit" method="post">
+<div>
     <label for="name">Habit Name:</label>
-    <input type="text" name="name" required autocomplete="off">
+    <input type="text" id="name" required autocomplete="off">
     <label for="description">Description (optional):</label>
-    <input type="text" name="description" autocomplete="off">
-    <input type="submit" value="Add Habit">
-</form>
+    <input type="text" id="description" autocomplete="off">
+    <button id="add-habit-btn">Add Habit</button>
+</div>
 
 <h2>Your Habits</h2>
-<ul>
+<ul id="habits-list">
     {% for habit in habits %}
-    <li>
+    <li data-id="{{ habit.id }}">
         {{ habit.name }} - {{ habit.description }} (Completed {{ habit.completions|length }} times)
-        <form action="/complete-habit/{{ habit.id }}" method="post" style="display:inline;">
-            <input type="submit" value="Mark as Completed">
-        </form>
-        <form action="/delete-habit/{{ habit.id }}" method="POST">
-            <button type="submit">Delete</button>
-        </form>
+        <button class="complete-habit-btn">Mark as Completed</button>
+        <button class="delete-habit-btn">Delete</button>
     </li>
     {% endfor %}
 </ul>
-
 {% endblock %}
