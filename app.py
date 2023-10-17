@@ -15,6 +15,15 @@ class Habit(db.Model):
     # Relationship to the Completion model
     completions = db.relationship('Completion', backref='habit', lazy=True, cascade="all, delete-orphan")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'start_date': self.start_date,
+            'completions': [completion.to_dict() for completion in self.completions]
+        }
+
     def __repr__(self):
         return '<Habit %r>' % self.name
 
@@ -38,6 +47,11 @@ def index():
 
 with app.app_context():
     db.create_all()
+
+@app.route('/api/habits', methods=['GET'])
+def get_habits():
+    habits = Habit.query.all()
+    return jsonify([habit.to_dict() for habit in habits])
 
 @app.route('/add-habit', methods=['POST'])
 def add_habit():
