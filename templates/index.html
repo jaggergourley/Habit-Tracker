@@ -2,7 +2,8 @@
 
 {% block head %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="./static/index.js"></script>
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+
 {% endblock %}
 
 {% block body %}
