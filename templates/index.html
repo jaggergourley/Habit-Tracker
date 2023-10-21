@@ -3,7 +3,6 @@
 {% block head %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ url_for('static', filename='index.js') }}"></script>
-
 {% endblock %}
 
 {% block body %}
@@ -11,10 +10,12 @@
 
 <div>
     <label for="name">Habit Name:</label>
-    <input type="text" id="name" required autocomplete="off">
+    <input type="text" id="name" class="input-text" required autocomplete="off">
+    
     <label for="description">Description (optional):</label>
-    <input type="text" id="description" autocomplete="off">
-    <button id="add-habit-btn">Add Habit</button>
+    <input type="text" id="description" class="input-text" autocomplete="off">
+    
+    <button id="add-habit-btn" class="button">Add Habit</button>
 </div>
 
 <h2>Your Habits</h2>
@@ -22,8 +23,9 @@
     {% for habit in habits %}
     <li data-id="{{ habit.id }}">
         {{ habit.name }} - {{ habit.description }} (Completed {{ habit.completions|length }} times)
-        <button class="complete-habit-btn">Mark as Completed</button>
-        <button class="delete-habit-btn">Delete</button>
+        
+        <button class="complete-habit-btn button">Mark as Completed</button>
+        <button class="delete-habit-btn button">Delete</button>
     </li>
     {% endfor %}
 </ul>
