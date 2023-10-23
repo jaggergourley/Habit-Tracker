@@ -8,12 +8,12 @@
 {% block body %}
 <h1>Habit Tracker</h1>
 
-<div>
+<div class="input-container">
     <label for="name">Habit Name:</label>
-    <input type="text" id="name" class="input-text" required autocomplete="off">
+    <input type="text" id="name" class="input-text" required autocomplete="off" placeholder="Enter Habit Name">
     
     <label for="description">Description (optional):</label>
-    <input type="text" id="description" class="input-text" autocomplete="off">
+    <input type="text" id="description" class="input-text" autocomplete="off" placeholder="Enter Habit Description">
     
     <button id="add-habit-btn" class="button">Add Habit</button>
 </div>
