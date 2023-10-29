@@ -31,9 +31,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     for (let day = 1; day <= daysInMonth; day++) {
       let row = calendarBody.insertRow();
-      for (let habit of habits) {
-        let cell = row.insertCell();
-        cell.textContent = day;
+
+      let habitCell = row.instertCell();
+      habitCell.textContent = habit;
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        row.insertCell();
       }
     }
   }
