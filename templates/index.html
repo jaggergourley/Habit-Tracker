@@ -13,9 +13,11 @@
 
 <ul>
     {% for habit in habits %}
-    <li style="text-decoration: {{'line-through' if habit.complete else 'none'}}">
-        {{ habit.title }}
-        <a href="{{ url_for('complete', id=habit.id)}}">Check Off</a>
+    <li>
+        {{ habit.title }} - Completed {{ habit.completion_count() }} times
+        <!-- Button for checking off habit -->
+        <a href="{{ url_for('checkoff', habit_id=habit.id) }}">Check Off Today</a>
+        <!-- Delete habit -->
         <a href="{{ url_for('delete', id=habit.id)}}">Delete</a>
     </li>
     {% endfor %}

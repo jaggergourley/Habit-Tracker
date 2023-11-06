@@ -13,6 +13,9 @@ class Habit(db.Model):
     title = db.Column(db.String(100), nullable=False)
     complete = db.Column(db.Boolean, default=False, nullable=False)
 
+    def completion_count(self):
+        return len(self.completions)
+
 
 class HabitCompletion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -39,10 +42,10 @@ def index():
     return render_template("index.html", habits=habits)
 
 
-@app.route("/complete/<int:id>")
-def complete(id):
-    habit = Habit.query.get(id)
-    habit.complete = not habit.complete
+@app.route("/checkoff/<int:habit_id>")
+def checkoff(habit_id):
+    habit_completion = HabitCompletion(date=date.today(), habit_id=habit_id)
+    db.session.add(habit_completion)
     db.session.commit()
     return redirect(url_for("index"))
 
