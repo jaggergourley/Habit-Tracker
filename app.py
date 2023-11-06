@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from datetime import date
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///habits.db"
@@ -11,6 +12,18 @@ class Habit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     complete = db.Column(db.Boolean, default=False, nullable=False)
+
+
+class HabitCompletion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False)
+    habit_id = db.Column(db.Integer, db.ForeignKey("habit.id"), nullable=False)
+    habit = db.relationship("Habit", back_populates="completions")
+
+
+Habit.completions = db.relationship(
+    "HabitCompletion", order_by=HabitCompletion.date, back_populates="habit"
+)
 
 
 @app.route("/", methods=["GET", "POST"])
